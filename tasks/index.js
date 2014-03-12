@@ -10,7 +10,7 @@ module.exports = function (grunt) {
             var vector = [];
             if (typeof this.data.srcs == 'string') {
                 if (this.data.srcs.indexOf("*") != -1) {
-                    var aux = grunt.file.expandMapping(this.data.srcs[i], '');
+                    var aux = grunt.file.expandMapping(this.data.srcs[x], '');
                     for (var i = 0; i < aux.length; i++) {
                         vector[i] = aux[i].dest;
                     }
@@ -37,9 +37,19 @@ module.exports = function (grunt) {
                 this.data.without = '';
             }
 
+            var vectorWithout = [];
             for (var i = 0; i < vector.length; i++) {
-                sources[i] = vector[i].replace(this.data.without, "");
-                grunt.log.ok("source: " + sources[i]);
+                vectorWithout[i] = vector[i].replace(this.data.without, "");
+            }
+
+            // do not add dups to the sources dir
+            for (var x = 0; x < vectorWithout.length; x++) {
+                var val = vectorWithout[x];
+                if(!contains(vectorWithout, x, val)) {
+                    sources.push(val);
+                    grunt.log.ok("source: " + val);
+                }
+
             }
         } else {
             grunt.log.error('Please specify the sources files to inject into the html.');
@@ -60,4 +70,16 @@ module.exports = function (grunt) {
         }
 
     });
+
+
+    function contains(array, len, val) {
+        for (var i = 0; i < len; i++) {
+            if(array[i] == val) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 };
