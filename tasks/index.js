@@ -10,7 +10,7 @@ module.exports = function (grunt) {
             var vector = [];
             if (typeof this.data.srcs == 'string') {
                 if (this.data.srcs.indexOf("*") != -1) {
-                    var aux = grunt.file.expandMapping(this.data.srcs[x], '');
+                    var aux = grunt.file.expandMapping(this.data.srcs[i], '');
                     for (var i = 0; i < aux.length; i++) {
                         vector[i] = aux[i].dest;
                     }
@@ -37,15 +37,15 @@ module.exports = function (grunt) {
                 this.data.without = '';
             }
 
-            var vectorWithout = [];
+            var withoutVector = [];
             for (var i = 0; i < vector.length; i++) {
-                vectorWithout[i] = vector[i].replace(this.data.without, "");
+                withoutVector[i] = vector[i].replace(this.data.without, "");
             }
 
             // do not add dups to the sources dir
-            for (var x = 0; x < vectorWithout.length; x++) {
-                var val = vectorWithout[x];
-                if(!contains(vectorWithout, x, val)) {
+            for (var index = 0; index < withoutVector.length; index++) {
+                var val = withoutVector[index];
+                if(!contains(withoutVector, index, val)) {
                     sources.push(val);
                     grunt.log.ok("source: " + val);
                 }
